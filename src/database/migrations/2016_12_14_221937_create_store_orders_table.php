@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateOrdersTable extends Migration
+class CreateStoreOrdersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,21 +13,22 @@ class CreateOrdersTable extends Migration
      */
     public function up()
     {
-        Schema::create('orders', function (Blueprint $table) {
+        Schema::create('store_orders', function (Blueprint $table) {
             $table->increments('id');
             $table->uuid('order_num')->unique();
-            $table->string('transaction_id')->nullable();
-            $table->integer('customer_id')->default('0');
             $table->string('name');
             $table->string('email');
-            $table->text('billing_address');
+            $table->string('order_details');
             $table->text('shipping_address')->nullable();
             $table->text('shipping_notes')->nullable();
+            $table->string('transaction_id')->nullable();
+            $table->string('customer_id')->nullable();
+            $table->string('receipt_url')->nullable();
+            $table->string('payment_status')->nullable();
+            $table->integer('amount')->default(0);
+            $table->integer('net_amount')->default(0);
+            $table->integer('status')->default(1);
             $table->dateTime('shipped_at')->nullable();
-            $table->string('status')->default('ORDERED');
-            $table->integer('tax');
-            $table->integer('subtotal');
-            $table->integer('total');
             $table->timestamps();
         });
     }
@@ -39,6 +40,6 @@ class CreateOrdersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('orders');
+        Schema::dropIfExists('store_orders');
     }
 }

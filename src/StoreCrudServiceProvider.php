@@ -51,6 +51,7 @@ class StoreCrudServiceProvider extends ServiceProvider
                 \CRUD::resource('product', 'ProductCrudController');
                 \CRUD::resource('price_option', 'PriceOptionCrudController');
                 \CRUD::resource('price_group', 'PriceGroupCrudController');
+                \CRUD::resource('order', 'OrderCrudController');
             });
         });
     }
