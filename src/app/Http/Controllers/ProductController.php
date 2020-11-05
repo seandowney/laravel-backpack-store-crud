@@ -4,10 +4,14 @@ namespace SeanDowney\BackpackStoreCrud\app\Http\Controllers;
 
 use SeanDowney\BackpackStoreCrud\app\Models\Product;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Http\Request;
+
+use SeanDowney\BackpackStoreCrud\app\Http\Requests\ProductAddRequest;
 
 class ProductController extends Controller
 {
-    public function index($slug)
+    public function index($category, $slug)
     {
         $product = Product::findBySlug($slug);
 
@@ -22,4 +26,5 @@ class ProductController extends Controller
 
         return view('seandowney::store.product', $this->data);
     }
+
 }

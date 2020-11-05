@@ -3,6 +3,7 @@
 namespace SeanDowney\BackpackStoreCrud\app\Http\Controllers\Admin;
 
 use Backpack\CRUD\app\Http\Controllers\CrudController;
+use SeanDowney\BackpackStoreCrud\app\Events\OrderStatusUpdated;
 // VALIDATION: change the requests to match your own file names if you need form validation
 use SeanDowney\BackpackStoreCrud\app\Http\Requests\OrderRequest as StoreRequest;
 use SeanDowney\BackpackStoreCrud\app\Http\Requests\OrderRequest as UpdateRequest;
@@ -19,10 +20,14 @@ class OrderCrudController extends CrudController
         |--------------------------------------------------------------------------
         */
         $this->crud->setModel("SeanDowney\BackpackStoreCrud\app\Models\Order");
-        $this->crud->setRoute(config('backpack.base.route_prefix', 'admin').'/store/order');
+        $this->crud->setRoute(config('backpack.base.route_prefix', 'admin').'/'.config('seandowney.storecrud.route_prefix', 'store').'/order');
         $this->crud->setEntityNameStrings('Order', 'Orders');
 
         $this->crud->denyAccess('create');
+
+        // if (!request()->has('order')) {
+        //     $this->crud->orderBy('updated_at'. 'desc');
+        // }
 
         /*
         |--------------------------------------------------------------------------
@@ -44,29 +49,25 @@ class OrderCrudController extends CrudController
 
         // ------ CRUD COLUMNS
         $this->crud->addColumn([
-                                'name' => 'id',
-                                'label' => 'ID',
-                            ]);
+            'name' => 'id',
+            'label' => 'ID',
+        ]);
         $this->crud->addColumn([
-                                'name' => 'name',
-                                'label' => 'Name',
-                            ]);
+            'name' => 'name',
+            'label' => 'Customer Name',
+        ]);
         $this->crud->addColumn([
-                                'name' => 'order_details',
-                                'label' => 'Order Details',
-                            ]);
+            'name' => 'total',
+            'label' => 'Total',
+        ]);
         $this->crud->addColumn([
-                                'name' => 'amount',
-                                'label' => 'Amount',
-                            ]);
+            'name' => 'status',
+            'label' => 'Status',
+        ]);
         $this->crud->addColumn([
-                                'name' => 'status',
-                                'label' => 'Status',
-                            ]);
-        $this->crud->addColumn([
-                                'name' => 'updated_at',
-                                'label' => 'Updated',
-                            ]);
+            'name' => 'updated_at',
+            'label' => 'Updated',
+        ]);
 
         // ------ CRUD FIELDS
         $this->crud->addField([
@@ -75,6 +76,7 @@ class OrderCrudController extends CrudController
             'type' => 'datetime',
             'attributes' => [
                 'readonly' => 'readonly',
+                'disabled' => 'disabled',
             ],
             'tab' => 'Order Details'
         ]);
@@ -84,6 +86,7 @@ class OrderCrudController extends CrudController
             'type' => 'datetime',
             'attributes' => [
                 'readonly' => 'readonly',
+                'disabled' => 'disabled',
             ],
             'tab' => 'Order Details'
         ]);
@@ -98,26 +101,105 @@ class OrderCrudController extends CrudController
             'label' => 'Customer Name',
             'type' => 'text',
             'placeholder' => 'Customer Name',
-            'tab' => 'Order Details'
+            'tab' => 'Order Details',
+            'attributes' => [
+                'readonly' => 'readonly',
+                'disabled' => 'disabled',
+            ],
         ]);
         $this->crud->addField([
             'name' => 'email',
             'label' => 'Customer Email',
             'type' => 'text',
-            'tab' => 'Order Details'
-        ]);
-        $this->crud->addField([
-            'name' => 'order_details',
-            'label' => 'Order Details',
-            'type' => 'text',
+            'tab' => 'Order Details',
             'attributes' => [
                 'readonly' => 'readonly',
+                'disabled' => 'disabled',
             ],
+        ]);
+        $this->crud->addField([
+            'name' => 'phone',
+            'label' => 'Customer Phone',
+            'type' => 'text',
+            'tab' => 'Order Details',
+            'attributes' => [
+                'readonly' => 'readonly',
+                'disabled' => 'disabled',
+            ],
+        ]);
+        $this->crud->addField([
+            'name' => 'address',
+            'label' => 'Address',
+            'type' => 'text',
+            'tab' => 'Order Details',
+            'attributes' => [
+                'readonly' => 'readonly',
+                'disabled' => 'disabled',
+            ],
+        ]);
+        $this->crud->addField([
+            'name' => 'city',
+            'label' => 'City',
+            'type' => 'text',
+            'tab' => 'Order Details',
+            'attributes' => [
+                'readonly' => 'readonly',
+                'disabled' => 'disabled',
+            ],
+        ]);
+        $this->crud->addField([
+            'name' => 'state',
+            'label' => 'State',
+            'type' => 'text',
+            'tab' => 'Order Details',
+            'attributes' => [
+                'readonly' => 'readonly',
+                'disabled' => 'disabled',
+            ],
+        ]);
+        $this->crud->addField([
+            'name' => 'postcode',
+            'label' => 'Postcode',
+            'type' => 'text',
+            'tab' => 'Order Details',
+            'attributes' => [
+                'readonly' => 'readonly',
+                'disabled' => 'disabled',
+            ],
+        ]);
+        $this->crud->addField([
+            'name' => 'country',
+            'label' => 'Country',
+            'type' => 'text',
+            'tab' => 'Order Details',
+            'attributes' => [
+                'readonly' => 'readonly',
+                'disabled' => 'disabled',
+            ],
+        ]);
+
+        $this->crud->addField([
+            'name' => 'separator2',
+            'type' => 'custom_html',
+            'value' => '<hr>',
+            'tab' => 'Order Details'
+        ]);
+
+        $this->crud->addField([
+            'label' => 'Order Items',
+            'type' => 'order_items',
+            'name' => 'items',
+            // 'entity' => 'items', // the method that defines the relationship in your Model
+            'attribute' => 'title',
+            'model' => "SeanDowney\BackpackStoreCrud\app\Models\OrderItem", // foreign key model
+            'pivot' => false, // on create&update, do you need to add/delete pivot table entries?
+            // 'options' => $this->crud->getCurrentEntry()->items,
+            'columns' => ['sku', 'title', 'quantity', 'total'],
             'tab' => 'Order Details'
         ]);
         $this->crud->addField([
-            'name' => 'amount',
-            'label' => 'Amount',
+            'name' => 'sub_total',
+            'label' => 'Sub Total',
             'type' => 'number',
             'attributes' => [
                 'readonly' => 'readonly',
@@ -125,27 +207,37 @@ class OrderCrudController extends CrudController
             'tab' => 'Order Details'
         ]);
         $this->crud->addField([
-            'name' => 'separator',
+            'name' => 'delivery_cost',
+            'label' => 'Delivery Cost',
+            'type' => 'number',
+            'attributes' => [
+                'readonly' => 'readonly',
+            ],
+            'tab' => 'Order Details'
+        ]);
+        $this->crud->addField([
+            'name' => 'total',
+            'label' => 'Total',
+            'type' => 'number',
+            'attributes' => [
+                'readonly' => 'readonly',
+            ],
+            'tab' => 'Order Details'
+        ]);
+        $this->crud->addField([
+            'name' => 'separator3',
             'type' => 'custom_html',
             'value' => '<hr>',
             'tab' => 'Order Details'
         ]);
 
-        $this->crud->addField([    // WYSIWYG
-            'name' => 'shipping_address',
-            'label' => 'Shipping Address',
-            'type' => 'textarea',
-            'placeholder' => 'Shipping Address here',
-            'tab' => 'Order Details',
+        $this->crud->addField([    // ENUM
+            'name' => 'shipping_code',
+            'label' => 'Tracking Code',
+            'type' => 'text',
             'attributes' => [
-                'rows' => 6,
-            ]
-        ]);
-        $this->crud->addField([    // WYSIWYG
-            'name' => 'shipping_notes',
-            'label' => 'Shipping Notes',
-            'type' => 'textarea',
-            'placeholder' => 'Shipping Notes here',
+                'placeholder' => 'From An Post',
+            ],
             'tab' => 'Order Details'
         ]);
         $this->crud->addField([    // ENUM
@@ -209,6 +301,15 @@ class OrderCrudController extends CrudController
 
     public function update(UpdateRequest $request)
     {
-        return parent::updateCrud();
+        $current = $this->crud->getCurrentEntry();
+
+        $response = parent::updateCrud();
+
+        $updated = $this->crud->getCurrentEntry();
+        if ($updated->status !== $current->status) {
+            event(new OrderStatusUpdated($updated));
+        }
+
+        return $response;
     }
 }

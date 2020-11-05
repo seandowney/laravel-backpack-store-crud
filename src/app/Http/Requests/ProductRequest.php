@@ -2,8 +2,6 @@
 
 namespace SeanDowney\BackpackStoreCrud\app\Http\Requests;
 
-use App\Http\Requests\Request;
-
 class ProductRequest extends \Backpack\CRUD\app\Http\Requests\CrudRequest
 {
     /**
@@ -14,7 +12,7 @@ class ProductRequest extends \Backpack\CRUD\app\Http\Requests\CrudRequest
     public function authorize()
     {
         // only allow updates if the user is logged in
-        return \Auth::check();
+        return backpack_auth()->check();
     }
 
     /**
@@ -27,11 +25,12 @@ class ProductRequest extends \Backpack\CRUD\app\Http\Requests\CrudRequest
         return [
             'title' => 'required|min:2|max:255',
             'slug' => 'unique:store_products,slug,'.\Request::get('id'),
+            'code' => 'required|min:2',
             'description' => 'required|min:2',
             'status' => 'required',
             'price_from' => 'numeric',
-            'total_num' => 'numeric',
-            'remaining_num' => 'numeric',
+            'total_num' => 'nullable|numeric',
+            'remaining_num' => 'nullable|numeric',
         ];
     }
 

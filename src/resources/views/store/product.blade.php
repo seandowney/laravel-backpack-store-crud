@@ -9,8 +9,16 @@
 
 {{-- Page content --}}
 @section('content')
+<div class="page-title">
+    <div class="overlay"></div>
+    <h1>Shop</h1>
+</div>
 <!-- Page Heading/Breadcrumbs -->
-        <div class="row">
+<div class="light-wrapper">
+    <div class="container">
+  
+  
+          <div class="row">
             <div class="col-lg-12">
                 <h1 class="page-header">{{ $product->title }}</h1>
 
@@ -21,35 +29,24 @@
         <!-- Portfolio Item Row -->
         <div class="row">
 
-            <div class="col-md-8">
+            <div class="col-md-4">
                 @include('seandowney::store.partials.carousel', ['images' => $images])
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-8">
                 <h3>Description</h3>
                 {!! $product->description !!}
-                @if($product->total_num && $product->remaining_num)
-                <p class="post-meta">{{ $product->remaining_num }} remaining of {{ $product->total_num }}</p>
-                @endif
 
-                <h3>Options</h3>
                 @if($options)
-                <ul>
-                    @foreach($options as $option)
-                    <li><a href="{{ url('/store/purchase/'.$product->slug.'/'.$option->code)}}">{{ $option->title }} - €{{ $option->price }}</a></li>
-                    @endforeach
-                </ul>
+                <h3>Options</h3>
+                <product @if($product->remaining_num) v-bind:remainingnum="{{ $product->remaining_num }}" @endif @if($product->total_num) v-bind:totalnum="{{ (int)$product->total_num }}" @endif productcode="{{ $product->code }}" v-bind:options="{{ json_encode($options) }}"></product>
+                <div>
+                </div>
                 @endif
-                <!-- @if($product->priceOptions)
-                <ul>
-                    @foreach($product->priceOptions as $option)
-                    <li>{{ $option->title }} - €{{ $option->price }}</li>
-                    @endforeach
-                </ul>
-                @endif -->
             </div>
 
         </div>
         <!-- /.row -->
-
+    </div>
+</div>
 @stop

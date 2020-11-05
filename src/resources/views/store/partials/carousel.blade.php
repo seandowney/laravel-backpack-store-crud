@@ -10,7 +10,7 @@
     <div class="carousel-inner">
         @foreach($images as $display_image)
         <div class="item @if($loop->first)active @endif">
-            <img class="img-responsive" src="{{ url('/uploads/'.$display_image) }}" alt="">
+            <img class="img-responsive" src="{{ url('/storage/'.$display_image) }}" alt="">
         </div>
         @endforeach
     </div>

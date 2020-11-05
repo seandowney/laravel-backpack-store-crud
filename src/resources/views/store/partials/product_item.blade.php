@@ -1,9 +1,12 @@
 <div class="col-md-4 img-portfolio">
-    <a href="{{ url('store/product/'.$product->slug) }}">
-        <img class="img-responsive img-hover" src="{{ url('uploads/'.$product->images[0]) }}" alt="">
+    @php
+        $images = (array)$product->images;   
+    @endphp
+    <a href="{{ url()->current().'/'.$product->slug }}">
+        <img class="img-responsive img-hover" src="{{ url('storage/'.array_shift($images)) }}" alt="">
     </a>
     <h3>
-        <a href="{{ url('store/product/'.$product->slug) }}">{{ $product->title }}</a>
+        <a href="{{ url()->current().'/'.$product->slug }}">{{ $product->title }}</a>
     </h3>
     {!! $product->description !!}
     @if($product->total_num && $product->remaining_num)

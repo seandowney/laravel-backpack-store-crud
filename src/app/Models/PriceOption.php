@@ -19,7 +19,7 @@ class PriceOption extends Model
     protected $primaryKey = 'id';
     public $timestamps = true;
     // protected $guarded = ['id'];
-    protected $fillable = ['title', 'code', 'price', 'status'];
+    protected $fillable = ['title', 'code', 'price', 'delivery_group_id', 'status'];
     // protected $hidden = [];
     // protected $dates = [];
     // protected $casts = [];
@@ -44,6 +44,11 @@ class PriceOption extends Model
     public function products()
     {
         return $this->belongsToMany('SeanDowney\BackpackStoreCrud\app\Models\Product', 'store_product_price_option');
+    }
+
+    public function deliveryGroup()
+    {
+        return $this->belongsTo('SeanDowney\BackpackStoreCrud\app\Models\DeliveryGroup');
     }
 
     /*

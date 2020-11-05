@@ -18,6 +18,7 @@ class CreateStorePriceOptionsTable extends Migration
             $table->string('title');
             $table->string('code')->unique();
             $table->float('price', 8, 2);
+            $table->integer('delivery_group_id')->unsigned()->nullable();
             $table->enum('status', ['PUBLISHED', 'DRAFT'])->default('PUBLISHED');
             $table->timestamps();
             $table->softDeletes();

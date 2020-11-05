@@ -19,7 +19,7 @@ class PriceGroupCrudController extends CrudController
         |--------------------------------------------------------------------------
         */
         $this->crud->setModel("SeanDowney\BackpackStoreCrud\app\Models\PriceGroup");
-        $this->crud->setRoute(config('backpack.base.route_prefix', 'admin').'/store/price_group');
+        $this->crud->setRoute(config('backpack.base.route_prefix', 'admin').'/'.config('seandowney.storecrud.route_prefix', 'store').'/price_group');
         $this->crud->setEntityNameStrings('Price Group', 'Price Groups');
 
         /*
@@ -30,37 +30,36 @@ class PriceGroupCrudController extends CrudController
 
         // ------ CRUD COLUMNS
         $this->crud->addColumn([
-                                'name' => 'title',
-                                'label' => 'Title',
-                            ]);
+            'name' => 'title',
+            'label' => 'Title',
+        ]);
         $this->crud->addColumn([
-                                'name' => 'status',
-                                'label' => 'Status',
-                            ]);
+            'name' => 'status',
+            'label' => 'Status',
+        ]);
 
         // ------ CRUD FIELDS
         $this->crud->addField([    // TEXT
-                                'name' => 'title',
-                                'label' => 'Title',
-                                'type' => 'text',
-                                'placeholder' => 'Your title here',
-                            ]);
+            'name' => 'title',
+            'label' => 'Title',
+            'type' => 'text',
+            'placeholder' => 'Your title here',
+        ]);
         $this->crud->addField([       // Select2Multiple = n-n relationship (with pivot table)
-                                'label' => 'Price Options',
-                                'type' => 'select2_multiple',
-                                'name' => 'priceOptions', // the method that defines the relationship in your Model
-                                'entity' => 'priceOptions', // the method that defines the relationship in your Model
-                                'attribute' => 'title', // foreign key attribute that is shown to user
-                                'model' => "SeanDowney\BackpackStoreCrud\app\Models\PriceOption", // foreign key model
-                                'pivot' => true, // on create&update, do you need to add/delete pivot table entries?
-                            ]);
+            'label' => 'Price Options',
+            'type' => 'select2_multiple',
+            'name' => 'priceOptions', // the method that defines the relationship in your Model
+            'entity' => 'priceOptions', // the method that defines the relationship in your Model
+            'attribute' => 'title', // foreign key attribute that is shown to user
+            'model' => "SeanDowney\BackpackStoreCrud\app\Models\PriceOption", // foreign key model
+            'pivot' => true, // on create&update, do you need to add/delete pivot table entries?
+        ]);
         $this->crud->addField([    // ENUM
-                                'name' => 'status',
-                                'label' => 'Status',
-                                'type' => 'enum',
-                            ]);
+            'name' => 'status',
+            'label' => 'Status',
+            'type' => 'enum',
+        ]);
 
-        $this->crud->enableAjaxTable();
     }
 
     public function store(StoreRequest $request)

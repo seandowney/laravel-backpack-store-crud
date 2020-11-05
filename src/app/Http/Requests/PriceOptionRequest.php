@@ -2,8 +2,6 @@
 
 namespace SeanDowney\BackpackStoreCrud\app\Http\Requests;
 
-use App\Http\Requests\Request;
-
 class PriceOptionRequest extends \Backpack\CRUD\app\Http\Requests\CrudRequest
 {
     /**
@@ -14,7 +12,7 @@ class PriceOptionRequest extends \Backpack\CRUD\app\Http\Requests\CrudRequest
     public function authorize()
     {
         // only allow updates if the user is logged in
-        return \Auth::check();
+        return backpack_auth()->check();
     }
 
     /**
@@ -27,6 +25,7 @@ class PriceOptionRequest extends \Backpack\CRUD\app\Http\Requests\CrudRequest
         return [
             'title' => 'required|min:2|max:255',
             'code' => 'unique:store_price_options,code,'.\Request::get('id'),
+            'delivery_group_id' => 'nullable|integer',
             'price' => 'required|numeric',
             'status' => 'required',
         ];

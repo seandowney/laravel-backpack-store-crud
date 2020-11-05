@@ -31,21 +31,29 @@ $ php artisan migrate #create the store tables
 <li class="treeview">
   <a href="#"><i class="fa fa-group"></i> <span>Store</span> <i class="fa fa-angle-left pull-right"></i></a>
   <ul class="treeview-menu">
-      <li><a href="{{ url(config('backpack.base.route_prefix', 'admin') . '/store/product') }}"><i class="fa fa-newspaper-o"></i> <span>Products</span></a></li>
-      <li><a href="{{ url(config('backpack.base.route_prefix', 'admin') . '/store/category') }}"><i class="fa fa-newspaper-o"></i> <span>Categories</span></a></li>
-      <li><a href="{{ url(config('backpack.base.route_prefix', 'admin') . '/store/price_option') }}"><i class="fa fa-list"></i> <span>Price Options</span></a></li>
-      <li><a href="{{ url(config('backpack.base.route_prefix', 'admin') . '/store/price_group') }}"><i class="fa fa-tag"></i> <span>Price Groups</span></a></li>
+      <li><a href="{{ url(config('backpack.base.route_prefix', 'admin') . '/'.config('seandowney.storecrud.route_prefix', 'store').'/product') }}"><i class="fa fa-newspaper-o"></i> <span>Products</span></a></li>
+      <li><a href="{{ url(config('backpack.base.route_prefix', 'admin') . '/'.config('seandowney.storecrud.route_prefix', 'store').'/category') }}"><i class="fa fa-newspaper-o"></i> <span>Categories</span></a></li>
+      <li><a href="{{ url(config('backpack.base.route_prefix', 'admin') . '/'.config('seandowney.storecrud.route_prefix', 'store').'/price_option') }}"><i class="fa fa-list"></i> <span>Price Options</span></a></li>
+      <li><a href="{{ url(config('backpack.base.route_prefix', 'admin') . '/'.config('seandowney.storecrud.route_prefix', 'store').'/price_group') }}"><i class="fa fa-tag"></i> <span>Price Groups</span></a></li>
+      <li><a href="{{ url(config('backpack.base.route_prefix', 'admin') . '/'.config('seandowney.storecrud.route_prefix', 'store').'/delivery_option') }}"><i class="fa fa-list"></i> <span>Delivery Options</span></a></li>
+      <li><a href="{{ url(config('backpack.base.route_prefix', 'admin') . '/'.config('seandowney.storecrud.route_prefix', 'store').'/delivery_group') }}"><i class="fa fa-tag"></i> <span>Delivery Groups</span></a></li>
+      <li><a href="{{ url(config('backpack.base.route_prefix', 'admin') . '/'.config('seandowney.storecrud.route_prefix', 'store').'/order') }}"><i class="fa fa-tag"></i> <span>Orders</span></a></li>
   </ul>
 </li>
 ```
 
 5) [Optional] Add a basic Store frontend using the base controllers.
 
-* Add the Stipe pakage to the project
+* Add the Stripe pakage to the project
+* If you want to use the Vue components, add the components to the `resources/assets/js/app.js` file
+    * `Vue.component('review-cart', require('./components/ReviewCart.vue'));`
+    * `Vue.component('header-cart', require('./components/HeaderCart.vue'));`
+    * `Vue.component('product', require('./components/Product.vue'));`
+
 * Add the following routes to your `routes/web.php` file:
 
 ```php
-Route::group(['prefix' => 'store'], function () {
+Route::group(['prefix' => config('seandowney.storecrud.route_prefix', 'store')], function () {
     Route::get('/', ['uses' => '\SeanDowney\BackpackStoreCrud\app\Http\Controllers\StoreController@index']);
 
     Route::get('category/{category}/{subs?}', ['uses' => '\SeanDowney\BackpackStoreCrud\app\Http\Controllers\StoreController@category'])
@@ -57,6 +65,19 @@ Route::group(['prefix' => 'store'], function () {
         ->where(['item' => '^((?!admin).)*$', 'code' => '.*']);
     Route::post('purchase/{item}/{code}', ['uses' => '\SeanDowney\BackpackStoreCrud\app\Http\Controllers\PurchaseController@pay'])
         ->where(['item' => '^((?!admin).)*$', 'code' => '.*']);
+});
+```
+
+* Add the following routes to your `routes/api.php` file :
+
+```php
+Route::group(['prefix' => config('seandowney.storecrud.route_prefix', 'store'), 'middleware' => $middleware], function () {
+    Route::post('country', ['uses' => '\SeanDowney\BackpackStoreCrud\app\Http\Controllers\PurchaseController@countryDelivery']);
+    Route::get('cart', ['uses' => '\SeanDowney\BackpackStoreCrud\app\Http\Controllers\CartController@cart']);
+    Route::get('cart/count', '\SeanDowney\BackpackStoreCrud\app\Http\Controllers\PurchaseController@count');
+    Route::delete('cart', '\SeanDowney\BackpackStoreCrud\app\Http\Controllers\CartController@destroy');
+
+    Route::apiResource('cart/items', '\SeanDowney\BackpackStoreCrud\app\Http\Controllers\CartItemController', ['only' => ['store', 'update', 'destroy']]);
 });
 ```
 

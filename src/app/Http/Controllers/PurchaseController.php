@@ -5,66 +5,203 @@ namespace SeanDowney\BackpackStoreCrud\app\Http\Controllers;
 use SeanDowney\BackpackStoreCrud\app\Models\Product;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use SeanDowney\BackpackStoreCrud\app\Models\Order;
+use Illuminate\Support\Facades\Session;
+use Stripe\Charge;
+use Stripe\Stripe;
+use Stripe\Customer;
+use Illuminate\Support\Str;
+use SeanDowney\BackpackStoreCrud\app\Events\OrderReceived;
+use SeanDowney\BackpackStoreCrud\app\Cart\Cart;
+
 
 class PurchaseController extends Controller
 {
-    public function show($slug, $code)
+    protected $cart;
+
+    public function __construct(Cart $cart)
     {
-        $product = Product::findBySlug($slug);
-
-        if (!$product) {
-            abort(404, 'Please go back to our <a href="'.url('').'">homepage</a>.');
-        }
-
-        $option = $product->options()->where('code', $code)->first()->toArray();
-
-        $this->data['title'] = $product->title;
-        $this->data['product'] = $product->withFakes();
-        $this->data['images'] = $product->images;
-        $this->data['option'] = $option;
-
-        return view('seandowney::store.purchase_form', $this->data);
+        $this->cart = $cart;
     }
 
-    public function pay(Request $request, $slug, $code)
+    public function index()
     {
-        $product = Product::findBySlug($slug);
+        $orderSummary = $this->cart->summary();
 
-        if (!$product) {
-            abort(404, 'Please go back to our <a href="'.url('').'">homepage</a>.');
+        /**
+         * @TODO Check that the quantity selected is still available
+         */
+
+        $viewData['title'] = '';
+        $viewData['countries'] = config('seandowney.storecrud.countries');
+
+        $viewData['standardDelivery'] = 0;
+        $viewData['subTotal'] = $orderSummary['total'];
+        $viewData['total'] = $orderSummary['total'];
+
+        return view('seandowney::store.purchase_form', $viewData);
+    }
+
+
+    public function countryDelivery(Request $request)
+    {
+        request()->validate([
+            'country' => 'required|max:2',
+        ]);
+
+        $country = request()->get('country');
+
+        $deliveryDetails = [
+            'message' => 'Sorry no delivery available to this country',
+        ];
+
+        $deliveryPrice = $this->cart->deliveryCostForCountry($country);
+
+        if (!is_null($deliveryPrice)) {
+            $deliveryDetails = [
+                'price' => $deliveryPrice,
+            ];
         }
 
-        $option = $product->options()->where('code', $code)->first()->toArray();
+        // check if there is a specific delivery option for this
+        return response()->json($deliveryDetails);
+    }
+
+    /**
+     * Process the purchase
+     */
+    public function pay()
+    {
+         request()->validate([
+            'name' => 'required|min:5',
+            'email' => 'required|email',
+            'phone' => [
+                'required',
+                'regex:/(00|\+)[0-9]{9,15}/',
+            ],
+            'address1' => 'required|min:5',
+            'address_city' => 'required|min:3',
+            'address_state' => 'required|min:2',
+            'country' => 'required|min:2|max:2',
+            'terms_conditions' => 'accepted',
+            'stripeToken' => 'required',
+        ]);
+
+        $orderSummary = $this->cart->summary();
+
+        /**
+         * @TODO Check that the quantity selected is still available
+         */
+
+        $country = request()->get('country');
+
+        $deliveryPrice = $this->cart->deliveryCostForCountry($country);
+        $deliveryPrice = is_null($deliveryPrice) ? 0 : $deliveryPrice;
+
+        if (empty(request()->get('stripeToken'))) {
+            session()->flash('error', 'Some error while making the payment. Please try again');
+            return back()->withInput();
+        }
 
         // Set your secret key: remember to change this to your live secret key in production
         // See your keys here: https://dashboard.stripe.com/account/apikeys
         \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
-        // Get the credit card details submitted by the form
-        // $token = $_POST['stripeToken'];
 
-        // Create a charge: this will charge the user's card
+        /**
+         * @TODO Tidy up the Stripe payment part
+         */
         try {
-            $order_id = 'wsad';
-          $charge = \Stripe\Charge::create([
-                "amount" => $option['price'] * 100, // Amount in cents
-                "currency" => "eur",
-                "source" => $request->input('stripeToken'),
-                "description" => $product->title.' '.$option['title'],
-                "metadata" => [
-                    "order_id" => $order_id,
-                ],
+            /** Add customer to stripe, Stripe customer */
+            Log::debug('Create Stripe Customer');
+            $customer = Customer::create([
+                'name'     => request('name'),
+                'email'     => request('email'),
+                'source'    => request('stripeToken')
             ]);
-
-            // echo "<pre>".print_r($charge, true)."</pre>".PHP_EOL;
-            $this->data = [];
-            $this->data['title'] = $product->title;
-            $this->data['product'] = $product;
-            $this->data['order_id'] = $order_id;
-            $this->data['amount'] = $option['price'];
-            return view('seandowney::store.purchase_success', $this->data);
-        } catch(\Stripe\Error\Card $e) {
-          // The card has been declined
+        } catch (\Exception $e) {
+            $apiError = $e->getMessage();
         }
+
+        $orderNum = Order::generateToken();
+        $totalPrice = ($orderSummary['total'] + $deliveryPrice) * 100;
+
+        if (empty($apiError) && $customer) {
+            /** Charge a credit or a debit card */
+            try {
+                /** Stripe charge class */
+                Log::debug('Create Stripe Charge');
+                $charge = Charge::create(array(
+                    'customer'      => $customer->id,
+                    'amount'        => $totalPrice,
+                    'currency'      => 'eur',
+                    'description'   => '',
+                    'metadata'      => [
+                        'order_num'  => $orderNum,
+                    ]
+                ));
+            } catch (\Exception $e) {
+                $apiError = $e->getMessage();
+            }
+
+            if (empty($apiError) && $charge) {
+                Log::debug('Charge Created');
+
+                // Retrieve charge details
+                $paymentDetails = $charge->jsonSerialize();
+                if ($paymentDetails['amount_refunded'] == 0 && empty($paymentDetails['failure_code']) && $paymentDetails['paid'] == 1 && $paymentDetails['captured'] == 1) {
+                    Log::debug('Create Order');
+                    $paymentDetails['customerId'] = $customer->id;
+                    $paymentDetails['chargeId']   = $charge->id;
+
+                    // Make the payment and merge the response with the request data, if successful.
+                    $data = request()->only([
+                        'name', 'email', 'phone', 'address1', 'address2', 'address_city', 'address_state', 'country', 'postcode',
+                    ]);
+                    $data['orderNum'] = $orderNum;
+                    $data['delivery'] = $deliveryPrice;
+
+                    $order = $this->cart->convertToOrder($data, $paymentDetails);
+
+                    /**
+                     * @TODO Products remaining
+                     */
+                    // if ($product->remaining) {
+                    //     $product->remaining = $product->remaining - 1;
+                    //     $product->save();
+                    // }
+
+                    // Charge::update($charge->id )
+
+                    // clear the cart
+                    $this->cart->clear();
+
+                    Log::debug('Move to Thank You page');
+                    $viewData = [];
+                    $viewData['order_id'] = $order->id;
+                    $viewData['order_num'] = $order->order_num;
+                    $viewData['amount'] = $totalPrice;
+                    $viewData['stripe_charge'] = $charge;
+                    $viewData['receipt_url'] = $paymentDetails['receipt_url'];
+                    return redirect('/'.config('seandowney.storecrud.route_prefix', 'store').'/thankyou')->with('order_id', $order->id);
+                } else {
+                    session()->flash('error', 'Transaction failed');
+                    return back()->withInput();
+                }
+            } else {
+                session()->flash('error', 'Error in capturing amount: ' . $apiError);
+                return back()->withInput();
+            }
+        } else {
+            session()->flash('error', 'Invalid card details: ' . $apiError);
+            return back()->withInput();
+        }
+    }
+
+    public function thankyou()
+    {
+        $order = Order::find(session('order_id'));
+        return view('seandowney::store.thankyou', ['order' => $order]);
     }
 }

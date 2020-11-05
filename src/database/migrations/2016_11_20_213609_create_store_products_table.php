@@ -18,6 +18,7 @@ class CreateStoreProductsTable extends Migration
             $table->integer('price_group_id')->unsigned()->nullable();
             $table->string('title');
             $table->string('slug')->default('')->unique();
+            $table->string('code')->unique();
             $table->text('description');
             $table->text('images')->nullable();
             $table->float('price_from', 8, 2)->nullable();

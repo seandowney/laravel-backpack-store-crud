@@ -22,11 +22,11 @@ class Product extends Model
     protected $primaryKey = 'id';
     public $timestamps = true;
     // protected $guarded = ['id'];
-    protected $fillable = ['price_group_id', 'slug', 'title', 'description', 'images', 'status', 'price_from', 'featured', 'total_num', 'remaining_num'];
+    protected $fillable = ['price_group_id', 'slug', 'title', 'code', 'description', 'images', 'status', 'price_from', 'featured', 'total_num', 'remaining_num'];
     // protected $hidden = [];
     // protected $dates = [];
     protected $casts = [
-        'images' => 'array',
+        'images'    => 'array',
         'featured'  => 'boolean',
     ];
 
@@ -35,7 +35,7 @@ class Product extends Model
      *
      * @return array
      */
-    public function sluggable()
+    public function sluggable(): array
     {
         return [
             'slug' => [
@@ -66,6 +66,13 @@ class Product extends Model
 
         return collect($options);
     }
+
+
+    public static function findByCode(string $code)
+    {
+        return Product::where('code', $code)->firstOrFail();
+    }
+
 
     /*
     |--------------------------------------------------------------------------
@@ -123,7 +130,7 @@ class Product extends Model
     public function setImagesAttribute($value)
     {
         $attribute_name = "images";
-        $disk = "uploads";
+        $disk = "public";
         $destination_path = "";
 
         $this->uploadMultipleFilesToDisk($value, $attribute_name, $disk, $destination_path);
