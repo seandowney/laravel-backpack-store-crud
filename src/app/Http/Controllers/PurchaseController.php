@@ -40,7 +40,7 @@ class PurchaseController extends Controller
         $viewData['subTotal'] = $orderSummary['total'];
         $viewData['total'] = $orderSummary['total'];
 
-        return view('seandowney::store.purchase_form', $viewData);
+        return view('seandowney::store.frontend.purchase_form', $viewData);
     }
 
 
@@ -202,6 +202,6 @@ class PurchaseController extends Controller
     public function thankyou()
     {
         $order = Order::find(session('order_id'));
-        return view('seandowney::store.thankyou', ['order' => $order]);
+        return view('seandowney::store.frontend.thankyou', ['order' => $order]);
     }
 }

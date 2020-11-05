@@ -33,7 +33,8 @@ class StoreCrudServiceProvider extends ServiceProvider
         );
 
         // publish views
-        $this->publishes([__DIR__.'/resources/views' => resource_path('views/vendor/seandowney/storecrud')], 'views');
+        $this->publishes([__DIR__.'/resources/views/backpack' => resource_path('views/vendor/backpack')], 'views');
+        $this->publishes([__DIR__.'/resources/views/store' => resource_path('views/vendor/seandowney/storecrud')], 'views');
 
         // publish vue components
         $this->publishes([__DIR__.'/resources/assets/js' => resource_path('assets/js')], 'js');

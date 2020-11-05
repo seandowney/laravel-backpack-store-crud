@@ -16,8 +16,8 @@
 <!-- Page Heading/Breadcrumbs -->
 <div class="light-wrapper">
     <div class="container">
-  
-  
+
+
           <div class="row">
             <div class="col-lg-12">
                 <h1 class="page-header">{{ $product->title }}</h1>
@@ -30,7 +30,7 @@
         <div class="row">
 
             <div class="col-md-4">
-                @include('seandowney::store.partials.carousel', ['images' => $images])
+                @include('seandowney::store.frontend.partials.carousel', ['images' => $images])
             </div>
 
             <div class="col-md-8">

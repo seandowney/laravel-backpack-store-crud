@@ -4,6 +4,7 @@ namespace SeanDowney\BackpackStoreCrud\app\Http\Controllers;
 
 use SeanDowney\BackpackStoreCrud\app\Models\Category;
 use App\Http\Controllers\Controller;
+use SeanDowney\BackpackStoreCrud\app\Models\Product;
 
 class StoreController extends Controller
 {
@@ -18,7 +19,7 @@ class StoreController extends Controller
         $this->data['title'] = 'The Store';
         $this->data['categories'] = $categories;
 
-        return view('seandowney::store.index', $this->data);
+        return view('seandowney::store.frontend.index', $this->data);
     }
 
     public function category($slug)
@@ -33,6 +34,23 @@ class StoreController extends Controller
         $this->data['category'] = $category->withFakes();
         $this->data['products'] = $category->products;
 
-        return view('seandowney::store.category', $this->data);
+        return view('seandowney::store.frontend.category', $this->data);
+    }
+
+
+    public function product($category, $slug)
+    {
+        $product = Product::findBySlug($slug);
+
+        if (!$product) {
+            abort(404, 'Please go back to our <a href="'.url('').'">homepage</a>.');
+        }
+
+        $this->data['title'] = $product->title;
+        $this->data['product'] = $product->withFakes();
+        $this->data['images'] = $product->images;
+        $this->data['options'] = $product->options();
+
+        return view('seandowney::store.frontend.product', $this->data);
     }
 }

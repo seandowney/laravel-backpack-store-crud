@@ -12,25 +12,27 @@
 <div class="page-title">
     <div class="overlay"></div>
     <h1>Shop</h1>
-</div>
-  
+  </div>
+
+
 <div class="light-wrapper">
     <div class="container">
-  
+
+
           <!-- Page Heading/Breadcrumbs -->
         <div class="row">
             <div class="col-lg-12">
-                <h1 class="page-header">{{ $title }}</h1>
+                <h1 class="page-header">{{ $category->title }}</h1>
+                {!! $category->description !!}
             </div>
         </div>
         <!-- /.row -->
 
         <div class="row">
-        @foreach ($categories as $category)
-            @include('seandowney::store.partials.category_item', ['category' => $category])
+        @foreach ($products as $product)
+            @include('seandowney::store.frontend.partials.product_item', ['product' => $product])
         @endforeach
         </div>
-
     </div>
 </div>
 @stop

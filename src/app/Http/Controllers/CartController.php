@@ -23,7 +23,7 @@ class CartController extends Controller
          * @TODO Check that the quantity selected is still available
          */
 
-        return view('seandowney::store.cart', $viewData);
+        return view('seandowney::store.frontend.cart', $viewData);
     }
 
     public function cart()

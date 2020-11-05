@@ -58,7 +58,7 @@ Route::group(['prefix' => config('seandowney.storecrud.route_prefix', 'store')],
 
     Route::get('category/{category}/{subs?}', ['uses' => '\SeanDowney\BackpackStoreCrud\app\Http\Controllers\StoreController@category'])
         ->where(['category' => '^((?!admin).)*$', 'subs' => '.*']);
-    Route::get('product/{product}/{subs?}', ['uses' => '\SeanDowney\BackpackStoreCrud\app\Http\Controllers\ProductController@index'])
+    Route::get('product/{product}/{subs?}', ['uses' => '\SeanDowney\BackpackStoreCrud\app\Http\Controllers\StoreController@product'])
         ->where(['product' => '^((?!admin).)*$', 'subs' => '.*']);
 
     Route::get('purchase/{item}/{code}', ['uses' => '\SeanDowney\BackpackStoreCrud\app\Http\Controllers\PurchaseController@show'])
@@ -73,8 +73,8 @@ Route::group(['prefix' => config('seandowney.storecrud.route_prefix', 'store')],
 ```php
 Route::group(['prefix' => config('seandowney.storecrud.route_prefix', 'store'), 'middleware' => $middleware], function () {
     Route::post('country', ['uses' => '\SeanDowney\BackpackStoreCrud\app\Http\Controllers\PurchaseController@countryDelivery']);
+
     Route::get('cart', ['uses' => '\SeanDowney\BackpackStoreCrud\app\Http\Controllers\CartController@cart']);
-    Route::get('cart/count', '\SeanDowney\BackpackStoreCrud\app\Http\Controllers\PurchaseController@count');
     Route::delete('cart', '\SeanDowney\BackpackStoreCrud\app\Http\Controllers\CartController@destroy');
 
     Route::apiResource('cart/items', '\SeanDowney\BackpackStoreCrud\app\Http\Controllers\CartItemController', ['only' => ['store', 'update', 'destroy']]);
