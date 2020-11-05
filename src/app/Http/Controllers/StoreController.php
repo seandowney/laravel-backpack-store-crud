@@ -19,7 +19,7 @@ class StoreController extends Controller
         $this->data['title'] = 'The Store';
         $this->data['categories'] = $categories;
 
-        return view('seandowney::store.frontend.index', $this->data);
+        return view('seandowney::frontend.index', $this->data);
     }
 
     public function category($slug)
@@ -34,7 +34,7 @@ class StoreController extends Controller
         $this->data['category'] = $category->withFakes();
         $this->data['products'] = $category->products;
 
-        return view('seandowney::store.frontend.category', $this->data);
+        return view('seandowney::frontend.category', $this->data);
     }
 
 
@@ -51,6 +51,6 @@ class StoreController extends Controller
         $this->data['images'] = $product->images;
         $this->data['options'] = $product->options();
 
-        return view('seandowney::store.frontend.product', $this->data);
+        return view('seandowney::frontend.product', $this->data);
     }
 }

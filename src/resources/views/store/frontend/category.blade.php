@@ -30,7 +30,7 @@
 
         <div class="row">
         @foreach ($products as $product)
-            @include('seandowney::store.frontend.partials.product_item', ['product' => $product])
+            @include('seandowney::frontend.partials.product_item', ['product' => $product])
         @endforeach
         </div>
     </div>
