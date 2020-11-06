@@ -2,7 +2,7 @@
     <div>
         <div v-if="cart.count == 0">
         <p>
-            You have no items in your cart.
+            You have no items in your basket.
 
             <a class="btn btn-success float-right" href="/shop">Continue Shopping</a>
         </p>
@@ -30,14 +30,14 @@
                 </tbody>
             </table>
             <p>
-                You have {{cart.count}} items in your cart to the total amount of {{cart.total}}.
+                You have {{cart.count}} items in your basket to the total amount of {{cart.total}}.
             </p>
             <p>
                 Delivery is <b>free</b> inside Ireland.
             </p>
             <p>
                 <a class="btn btn-success float-right" href="/shop/checkout">Proceed to checkout</a>
-                <a @click="clearCart" href="#">Clear cart</a>
+                <a @click="clearCart" href="#">Clear basket</a>
             </p>
         </div>
     </div>

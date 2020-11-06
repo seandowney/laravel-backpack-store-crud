@@ -17,7 +17,7 @@ class CartController extends Controller
 
     public function index()
     {
-        $viewData['title'] = 'Cart';
+        $viewData['title'] = 'Basket';
 
         /**
          * @TODO Check that the quantity selected is still available

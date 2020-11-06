@@ -4,13 +4,14 @@
     @endphp
     <a href="{{ url()->current().'/'.$product->slug }}">
         <img class="img-responsive img-hover" src="{{ url('storage/'.array_shift($images)) }}" alt="">
+        <h3>
+            {{ $product->title }}
+        </h3>
     </a>
-    <h3>
-        <a href="{{ url()->current().'/'.$product->slug }}">{{ $product->title }}</a>
-    </h3>
-    {!! $product->description !!}
-    @if($product->total_num && $product->remaining_num)
-    <p class="post-meta">{{ $product->remaining_num }} left</p>
-    @endif
-    @if($product->price_from)From €{{ $product->price_from }}@endif
+    
+    @if($product->intro)<p>{{ $product->intro }}</p>@endif
+
+    @if($product->price_from)<p class="post-meta">{{ $product->price_from }}</p>@endif
+
+    <a href="{{ url()->current().'/'.$product->slug }}" class="btn btn-success">See Options</a>
 </div>

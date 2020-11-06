@@ -5,5 +5,5 @@
     <h3>
         <a href="{{ url(config('seandowney.storecrud.route_prefix', 'store').'/'.$category->slug.'/') }}">{{ $category->title }}</a>
     </h3>
-    {!! $category->description !!}
+    @if($category->description){!! $category->description !!}@endif
 </div>

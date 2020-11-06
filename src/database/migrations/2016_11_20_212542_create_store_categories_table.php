@@ -17,7 +17,7 @@ class CreateStoreCategoriesTable extends Migration
             $table->increments('id');
             $table->string('title');
             $table->string('slug')->default('')->unique();
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->string('image')->nullable();
             $table->enum('status', ['PUBLISHED', 'DRAFT'])->default('PUBLISHED');
             $table->boolean('featured')->default(0);

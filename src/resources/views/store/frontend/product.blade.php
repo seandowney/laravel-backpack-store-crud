@@ -29,22 +29,30 @@
         <!-- Portfolio Item Row -->
         <div class="row">
 
-            <div class="col-md-4">
+            <div class="col-md-6">
                 @include('seandowney::frontend.partials.carousel', ['images' => $images])
             </div>
 
-            <div class="col-md-8">
-                <h3>Description</h3>
-                {!! $product->description !!}
-
+            <div class="col-md-6">
                 @if($options)
-                <h3>Options</h3>
-                <product @if($product->remaining_num) v-bind:remainingnum="{{ $product->remaining_num }}" @endif @if($product->total_num) v-bind:totalnum="{{ (int)$product->total_num }}" @endif productcode="{{ $product->code }}" v-bind:options="{{ json_encode($options) }}"></product>
-                <div>
-                </div>
+                <h3>Select your option</h3>
+                <product
+                    @if($product->remaining_num) v-bind:remainingnum="{{ $product->remaining_num }}" @endif
+                    @if($product->total_num) v-bind:totalnum="{{ (int)$product->total_num }}" @endif
+                    productcode="{{ $product->code }}"
+                    currency="{{ config('seandowney.storecrud.currency.symbol', '€') }}"
+                    v-bind:options="{{ json_encode($options) }}"></product>
                 @endif
+
             </div>
 
+        </div>
+        <div class="row">
+
+            <div class="col-lg-12">
+                <h3>Description</h3>
+                {!! $product->description !!}
+            </div>
         </div>
         <!-- /.row -->
     </div>

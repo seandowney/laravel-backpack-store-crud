@@ -19,9 +19,10 @@ class CreateStoreProductsTable extends Migration
             $table->string('title');
             $table->string('slug')->default('')->unique();
             $table->string('code')->unique();
-            $table->text('description');
+            $table->string('intro')->nullable();
+            $table->text('description')->nullable();
             $table->text('images')->nullable();
-            $table->float('price_from', 8, 2)->nullable();
+            $table->string('price_from')->nullable();
             $table->boolean('featured')->default(0);
             $table->integer('total_num')->unsigned()->nullable();
             $table->integer('remaining_num')->unsigned()->nullable();

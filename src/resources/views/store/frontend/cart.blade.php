@@ -17,7 +17,7 @@
   <div class="container">
     <div class="row">
       <div class="col-sm-12 content">
-        <h1 class="page-header">Cart</h1>
+        <h1 class="page-header">Basket</h1>
         <review-cart></review-cart>
       </div>
     </div>

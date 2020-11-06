@@ -62,9 +62,15 @@ class ProductCrudController extends CrudController
 
         $this->crud->addField([
             'name' => 'code',
-            'label' => 'Code',
+            'label' => 'SKU Prefix',
             'type' => 'text',
             'hint' => 'Prefix for the SKU Code',
+        ]);
+        $this->crud->addField([
+            'name' => 'intro',
+            'label' => 'Intro',
+            'type' => 'text',
+            'hint' => 'Used on the Category pages',
         ]);
         $this->crud->addField([    // WYSIWYG
             'name' => 'description',
@@ -111,14 +117,10 @@ class ProductCrudController extends CrudController
             'type' => 'enum',
         ]);
         $this->crud->addField([    // Number
-            'name' => 'price_from',
+            'name'  => 'price_from',
             'label' => 'Price From',
-            'type' => 'number',
-            'attributes' => [
-                'step' => '0.01',
-                'min' => 0,
-            ],
-            'prefix' => "€",
+            'type'  => 'text',
+            'hint'  => 'Used on the Cateory pages eg €45 to €75',
         ]);
         $this->crud->addField([    // Number
             'name' => 'total_num',
