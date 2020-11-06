@@ -331,7 +331,6 @@ class Cart
             $option = $product->options()->where('code', $skuSplit[1])->first();
         }
 
-        $productNum = 1;
         $items = $this->getAllItems();
         $item = [];
         $item['id'] = $skuCode;

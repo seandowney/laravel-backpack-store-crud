@@ -70,7 +70,7 @@ class DeliveryOptionCrudController extends CrudController
                 'step' => '0.01',
                 'min' => 0,
             ],
-            'prefix' => "€",
+            'prefix' => config('seandowney.storecrud.currency.symbol', '€'),
         ]);
         $this->crud->addField([    // ENUM
             'name' => 'status',

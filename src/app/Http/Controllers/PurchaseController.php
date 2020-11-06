@@ -135,7 +135,7 @@ class PurchaseController extends Controller
                 $charge = Charge::create(array(
                     'customer'      => $customer->id,
                     'amount'        => $totalPrice,
-                    'currency'      => 'eur',
+                    'currency'      => config('seandowney.storecrud.currency.code', 'EUR'),
                     'description'   => '',
                     'metadata'      => [
                         'order_num'  => $orderNum,
