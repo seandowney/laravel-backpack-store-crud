@@ -28,7 +28,6 @@ class ProductRequest extends \Backpack\CRUD\app\Http\Requests\CrudRequest
             'code' => 'required|min:2',
             'description' => 'required|min:2',
             'status' => 'required',
-            'price_from' => 'numeric',
             'total_num' => 'nullable|numeric',
             'remaining_num' => 'nullable|numeric',
         ];
