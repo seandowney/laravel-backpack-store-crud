@@ -30,7 +30,7 @@
                 </tbody>
             </table>
             <p>
-                You have {{cart.count}} items in your basket to the total amount of {{cart.displayTotal}}.
+                You have {{cart.count}} items in your basket to the total amount of {{cart.display_total}}.
             </p>
             <p>
                 Delivery is <b>free</b> inside Ireland.
