@@ -24,13 +24,14 @@
             </div>
             <button class="btn btn-success dropdown-toggle" @click="addToCart()">Add to Basket</button>
             <transition name="fade">
+                <div v-if="showsuccess" class="text-success font-italic success-add pull-right">Your item has been added</div>
             </transition>
         </div>
         <div v-else class="form-row">
             <p>There are no more items available.</p>
             <a href="/shop/cart" class="btn btn-success">Visit the Basket</a>
         </div>
-        <div v-if="showsuccess" class="text-success font-italic success-add">Your item has been added</div>
+        <div v-if="cart.count"><a href="/shop/cart" class="btn btn-success">Visit the Basket</a></div>
     </div>
 </template>
 

@@ -89,11 +89,10 @@ class Cart
             'items' => $this->items(),
             // 'discounts' => $this->discounts(),
             'sub_total' => $subTotal,
-            // 'sub_total_formatted' => $formatter->format($subTotal),
+            'displayTotal' => config('seandowney.storecrud.currency.symbol').$subTotal,
             'tax_total' => $taxTotal,
-            // 'tax_total_formatted' => $formatter->format($taxTotal),
             'total' => $total,
-            // 'total_formatted' => $formatter->format($total),
+            'displayTotal' => config('seandowney.storecrud.currency.symbol').$total,
             'count' => $this->count(),
         ];
     }
@@ -338,7 +337,9 @@ class Cart
         $item['option'] = $option;
         $item['num'] = $quantity;
         $item['price'] = $option->price;
+        $item['displayPrice'] = config('seandowney.storecrud.currency.symbol').$option->price;
         $item['total'] = $option->price * $quantity;
+        $item['displayTotal'] = config('seandowney.storecrud.currency.symbol').$item['total'];
         $item = (object) $item;
 
         // // Find already added items that are identical to current selection.

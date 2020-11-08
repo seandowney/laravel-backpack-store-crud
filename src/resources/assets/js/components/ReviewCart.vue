@@ -2,7 +2,7 @@
     <div>
         <div v-if="cart.count == 0">
         <p>
-            You have no items in your basket.
+            <p>You have no items in your basket.</p>
 
             <a class="btn btn-success float-right" href="/shop">Continue Shopping</a>
         </p>
@@ -22,7 +22,7 @@
                         <tr v-for="item in cart.items" :key="'product-' + item.id">
                             <td>{{item.product.title}} {{item.option.title}}</td>
                             <td>{{item.num}}</td>
-                            <td>{{item.option.price}}</td>
+                            <td>{{item.displayPrice}}</td>
                             <td>
                                 <a class="btn btn-danger" @click="removeFromCart(item)">Remove</a>
                             </td>
@@ -30,7 +30,7 @@
                 </tbody>
             </table>
             <p>
-                You have {{cart.count}} items in your basket to the total amount of {{cart.total}}.
+                You have {{cart.count}} items in your basket to the total amount of {{cart.displayTotal}}.
             </p>
             <p>
                 Delivery is <b>free</b> inside Ireland.

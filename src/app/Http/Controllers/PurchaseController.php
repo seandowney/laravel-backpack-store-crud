@@ -36,6 +36,7 @@ class PurchaseController extends Controller
         $viewData['title'] = '';
         $viewData['countries'] = config('seandowney.storecrud.countries');
 
+        $viewData['currency'] = config('seandowney.storecrud.currency.symbol');
         $viewData['standardDelivery'] = 0;
         $viewData['subTotal'] = $orderSummary['total'];
         $viewData['total'] = $orderSummary['total'];

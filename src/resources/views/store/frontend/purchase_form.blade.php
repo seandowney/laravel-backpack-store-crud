@@ -259,11 +259,9 @@
       </div>
       <div class="form-row">
         <h2>Final Costs</h2>
-      </div>
-        <div class="col-lg-12">
-        <p>Sub Total: <span id="subtotal">{{ $subTotal }}</span></p>
-        <p>Delivery: <span id="deliveryCost">{{ $standardDelivery }}</span></p>
-        <p>Total: <span id="totalCost">{{ $total }}</span></p>
+        <p>Sub Total: {{ $currency }}<span id="subtotal">{{ $subTotal }}</span></p>
+        <p>Delivery: {{ $currency }}<span id="deliveryCost">{{ $standardDelivery }}</span></p>
+        <p>Total: {{ $currency }}<span id="totalCost">{{ $total }}</span></p>
       </div>
 
       <div class="form-row">
@@ -294,18 +292,17 @@
               <div id="card_cvc" class="field form-control"></div>
           </div>
       </div>
-      <div class="row form-group">
-          <div class="col-md-12">
-              <div class="form-check form-check-inline custom-control custom-checkbox">
-                  <label for="terms_conditions" class="custom-control-label">
-                      <input type="checkbox" name="terms_conditions" id="terms_conditions" class="custom-control-input">
-                      I agree to terms & conditions
-                    </label>
-              </div>
-              {{-- @if($errors->first('terms_conditions')) --}}
-              <div class="text-danger font-italic error-terms">{{ $errors->first('terms_conditions') }}</div>
-              {{-- @endif --}}
+
+      <div class="form-row">
+          <div class="form-check form-check-inline custom-control custom-checkbox">
+              <label for="terms_conditions" class="custom-control-label">
+                  <input type="checkbox" name="terms_conditions" id="terms_conditions" class="custom-control-input">
+                  I agree to terms & conditions
+                </label>
           </div>
+          {{-- @if($errors->first('terms_conditions')) --}}
+          <div class="text-danger font-italic error-terms">{{ $errors->first('terms_conditions') }}</div>
+          {{-- @endif --}}
       </div>
 
         <button type="submit" class="btn pay-via-stripe-btn">Submit Payment</button>
@@ -319,7 +316,7 @@
       <p>Free delivery in Ireland</p>
 
       <h4>Outside Ireland</h4>
-      <p>E5 for Mounts, E10 for Framed</p>
+      <p>{{ $currency }}5 for Mounts, {{ $currency }}10 for Framed</p>
 
       <h4>
   </aside>
