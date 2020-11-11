@@ -127,12 +127,4 @@ class Product extends Model
     | MUTATORS
     |--------------------------------------------------------------------------
     */
-    public function setImagesAttribute($value)
-    {
-        $attribute_name = "images";
-        $disk = "public";
-        $destination_path = "";
-
-        $this->uploadMultipleFilesToDisk($value, $attribute_name, $disk, $destination_path);
-    }
 }
