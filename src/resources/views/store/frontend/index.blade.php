@@ -25,7 +25,7 @@
         </div>
         <!-- /.row -->
 
-        <div class="row">
+        <div class="row product-list">
         @foreach ($categories as $category)
             @include('seandowney::frontend.partials.category_item', ['category' => $category])
         @endforeach
