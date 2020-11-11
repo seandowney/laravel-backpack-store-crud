@@ -40,6 +40,7 @@ class StoreController extends Controller
 
     public function product($category, $slug)
     {
+        $category = Category::whereSlug($category)->published()->first();
         $product = Product::whereSlug($slug)->published()->first();
 
         if (!$product) {
@@ -47,6 +48,7 @@ class StoreController extends Controller
         }
 
         $this->data['title'] = $product->title;
+        $this->data['category'] = $category->withFakes();
         $this->data['product'] = $product->withFakes();
         $this->data['images'] = $product->images;
         $this->data['options'] = $product->options();
