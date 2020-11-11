@@ -78,12 +78,12 @@ class ProductCrudController extends CrudController
             'type' => 'ckeditor',
             'placeholder' => 'Your textarea text here',
         ]);
-        $this->crud->addField([    // Product
+        $this->crud->addField([
             'name' => 'images',
             'label' => 'Images',
-            'type' => 'upload_multiple',
-            'upload' => true,
-            'disk' => 'public',
+            'type' => 'browse_multiple',
+            'multiple' => true,
+            'mime_types' => ['image'],
         ]);
         $this->crud->addField([       // Select2Multiple = n-n relationship (with pivot table)
             'label' => 'Categories',
@@ -111,11 +111,6 @@ class ProductCrudController extends CrudController
             'model' => "SeanDowney\BackpackStoreCrud\app\Models\PriceOption", // foreign key model
             'pivot' => true, // on create&update, do you need to add/delete pivot table entries?
         ]);
-        $this->crud->addField([    // ENUM
-            'name' => 'status',
-            'label' => 'Status',
-            'type' => 'enum',
-        ]);
         $this->crud->addField([    // Number
             'name'  => 'price_from',
             'label' => 'Price From',
@@ -136,6 +131,11 @@ class ProductCrudController extends CrudController
             'name' => 'featured',
             'label' => 'Featured item',
             'type' => 'checkbox',
+        ]);
+        $this->crud->addField([    // ENUM
+            'name' => 'status',
+            'label' => 'Status',
+            'type' => 'enum',
         ]);
     }
 
