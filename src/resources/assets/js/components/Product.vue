@@ -4,7 +4,7 @@
         <div v-if="remaining > 0" class="form-row">
             <div class="form-row">
                 <label>
-                    <span>Choose the size</span> 
+                    <span>Choose the size</span>
                     <select v-model="form.sku" name="sku" id="sku" class="form-control">
                         <option v-for="option in options" v-bind:value="productcode + '-' + option.code" v-bind:key="option.code">{{ option.title }} - {{ currency }}{{ option.price }}</option>
                     </select>
@@ -13,7 +13,7 @@
             <div class="form-row">
                 <div v-if="remaining > 1">
                     <label>
-                        <span>Quantity</span> 
+                        <span>Quantity</span>
                         <select v-model="form.quantity" name="quantity" id="quantity" class="form-control">
                             <option v-for="option in quantities" v-bind:value="option" v-bind:key="option">{{ option }}</option>
                         </select>
@@ -41,7 +41,6 @@
         mounted() {
             this.getCart();
             this.remaining = this.remainingnum;
-            console.log('Remaining ' + this.remaining);
             for (var i = 1; i <= this.remaining; i++) {
                 this.quantities.push(i);
             }
