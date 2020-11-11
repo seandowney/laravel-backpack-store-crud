@@ -22,7 +22,8 @@
           <!-- Page Heading/Breadcrumbs -->
         <div class="row">
             <div class="col-lg-12">
-                <h1 class="page-header"><a href="/shop">Shop</a> - {{ $category->title }}</h1>
+                <ul class="breadcrumb"><li><a href="/shop">Shop</a></li></ul>
+                <h1 class="page-header">{{ $category->title }}</h1>
                 {!! $category->description !!}
             </div>
         </div>

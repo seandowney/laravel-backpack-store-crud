@@ -20,8 +20,8 @@
 
           <div class="row">
             <div class="col-lg-12">
-                <h1 class="page-header"><a href="/shop">Shop</a> - <a href="/shop/{{ $category->slug }}">{{ $category->title }}</a> - {{ $product->title }}</h1>
-
+                <ul class="breadcrumb"><li><a href="/shop">Shop</a></li><li><a href="/shop/{{ $category->slug }}">{{ $category->title }}</a></li></ul>
+                <h1 class="page-header">{{ $product->title }}</h1>
             </div>
         </div>
         <!-- /.row -->
