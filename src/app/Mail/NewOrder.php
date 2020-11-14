@@ -13,6 +13,7 @@ class NewOrder extends Mailable
     use Queueable, SerializesModels;
 
     public $order;
+    public $currency;
 
     /**
      * Create a new message instance.
@@ -22,6 +23,7 @@ class NewOrder extends Mailable
     public function __construct(Order $order)
     {
         $this->order = $order;
+        $this->currency = config('seandowney.storecrud.currency.symbol');
     }
 
     /**

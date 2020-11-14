@@ -89,10 +89,10 @@ class Cart
             'items' => $this->items(),
             // 'discounts' => $this->discounts(),
             'sub_total' => $subTotal,
-            'displayTotal' => config('seandowney.storecrud.currency.symbol').$subTotal,
+            'display_sub_total' => config('seandowney.storecrud.currency.symbol').$subTotal,
             'tax_total' => $taxTotal,
             'total' => $total,
-            'displayTotal' => config('seandowney.storecrud.currency.symbol').$total,
+            'display_total' => config('seandowney.storecrud.currency.symbol').$total,
             'count' => $this->count(),
         ];
     }

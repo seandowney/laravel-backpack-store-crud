@@ -20,8 +20,8 @@
 
           <div class="row">
             <div class="col-lg-12">
+                <ul class="breadcrumb"><li><a href="/shop">Shop</a></li><li><a href="/shop/{{ $category->slug }}">{{ $category->title }}</a></li></ul>
                 <h1 class="page-header">{{ $product->title }}</h1>
-
             </div>
         </div>
         <!-- /.row -->
@@ -40,7 +40,7 @@
                     @if($product->remaining_num) v-bind:remainingnum="{{ $product->remaining_num }}" @endif
                     @if($product->total_num) v-bind:totalnum="{{ (int)$product->total_num }}" @endif
                     productcode="{{ $product->code }}"
-                    currency="{{ config('seandowney.storecrud.currency.symbol', '€') }}"
+                    currency="€"
                     v-bind:options="{{ json_encode($options) }}"></product>
                 @endif
 

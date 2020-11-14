@@ -22,13 +22,14 @@
           <!-- Page Heading/Breadcrumbs -->
         <div class="row">
             <div class="col-lg-12">
+                <ul class="breadcrumb"><li><a href="/shop">Shop</a></li></ul>
                 <h1 class="page-header">{{ $category->title }}</h1>
                 {!! $category->description !!}
             </div>
         </div>
         <!-- /.row -->
 
-        <div class="row">
+        <div class="row product-list">
         @foreach ($products as $product)
             @include('seandowney::frontend.partials.product_item', ['product' => $product])
         @endforeach

@@ -32,7 +32,7 @@ class StoreController extends Controller
 
         $this->data['title'] = $category->title;
         $this->data['category'] = $category->withFakes();
-        $this->data['products'] = $category->products;
+        $this->data['products'] = $category->products()->published()->get();
 
         return view('seandowney::frontend.category', $this->data);
     }
@@ -40,13 +40,15 @@ class StoreController extends Controller
 
     public function product($category, $slug)
     {
-        $product = Product::findBySlug($slug);
+        $category = Category::whereSlug($category)->published()->first();
+        $product = Product::whereSlug($slug)->published()->first();
 
         if (!$product) {
             abort(404, 'Please go back to our <a href="'.url('').'">homepage</a>.');
         }
 
         $this->data['title'] = $product->title;
+        $this->data['category'] = $category->withFakes();
         $this->data['product'] = $product->withFakes();
         $this->data['images'] = $product->images;
         $this->data['options'] = $product->options();

@@ -1,11 +1,8 @@
 <template>
     <div>
         <div v-if="cart.count == 0">
-        <p>
             <p>You have no items in your basket.</p>
-
-            <a class="btn btn-success float-right" href="/shop">Continue Shopping</a>
-        </p>
+            <p><a class="btn btn-success float-right" href="/shop">Continue Shopping</a></p>
         </div>
         <div v-else>
             <p>
@@ -30,7 +27,7 @@
                 </tbody>
             </table>
             <p>
-                You have {{cart.count}} items in your basket to the total amount of {{cart.displayTotal}}.
+                You have {{cart.count}} items in your basket to the total amount of {{cart.display_total}}.
             </p>
             <p>
                 Delivery is <b>free</b> inside Ireland.

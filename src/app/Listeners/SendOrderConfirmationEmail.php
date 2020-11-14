@@ -23,7 +23,7 @@ class SendOrderConfirmationEmail
     /**
      * Handle the event.
      *
-     * @param  Event  $event
+     * @param  OrderReceived  $event
      * @return void
      */
     public function handle(OrderReceived $event)
