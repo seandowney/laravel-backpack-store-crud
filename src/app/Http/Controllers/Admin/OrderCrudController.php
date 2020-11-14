@@ -303,7 +303,7 @@ class OrderCrudController extends CrudController
         $response = parent::updateCrud();
 
         $updated = $this->crud->getCurrentEntry();
-        if ($updated->status !== $current->status) {
+        if ($updated->status != $current->status) {
             event(new OrderStatusUpdated($updated));
         }
 
