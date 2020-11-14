@@ -63,6 +63,8 @@ class OrderCrudController extends CrudController
         $this->crud->addColumn([
             'name' => 'status',
             'label' => 'Status',
+            'type' => 'select_from_array',
+            'options' => config('seandowney.storecrud.order_statuses'),
         ]);
         $this->crud->addColumn([
             'name' => 'updated_at',
@@ -243,18 +245,13 @@ class OrderCrudController extends CrudController
         $this->crud->addField([    // ENUM
             'name' => 'status',
             'label' => 'Status',
-            'type' => 'number',
+            'type' => 'select2_from_array',
+            'options' => config('seandowney.storecrud.order_statuses'),
+            'allows_null' => false,
+            'default' => 1,
+            'allows_multiple' => false,
             'tab' => 'Order Details'
         ]);
-        // $this->crud->addField([    // ENUM
-        //     'name' => 'status',
-        //     'label' => 'Status',
-        //     'type' => 'select2',
-        //     'entity' => 'orderStatus',
-        //     'attribute' => 'title',
-        //     'model' => "SeanDowney\BackpackStoreCrud\app\Models\OrderStatus",
-        //     'tab' => 'Order Details'
-        // ]);
 
         $this->crud->addField([
             'name' => 'customer_id',

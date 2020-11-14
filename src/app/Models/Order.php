@@ -33,6 +33,16 @@ class Order extends Model
         return (string) Str::uuid();
     }
 
+    public function isProcessing()
+    {
+        return $this->status == ORDER_PROCESSING;
+    }
+
+    public function isDispatched()
+    {
+        return $this->status == ORDER_DISPATCHED;
+    }
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS

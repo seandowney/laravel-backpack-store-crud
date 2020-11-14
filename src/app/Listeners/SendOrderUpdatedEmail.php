@@ -26,17 +26,16 @@ class SendOrderUpdatedEmail
     /**
      * Handle the event.
      *
-     * @param  Event  $event
+     * @param  OrderStatusUpdated  $event
      * @return void
      */
     public function handle(OrderStatusUpdated $event)
     {
-        //
         $order = $event->order;
 
-        if ($order->status == 3) {
+        if ($order->isDispatched()) {
             Mail::to($order->email)->send(new OrderDispatched($order));
-        } else {
+        } elseif ($order->isProcessing()) {
             Mail::to($order->email)->send(new OrderUpdated($order));
         }
     }

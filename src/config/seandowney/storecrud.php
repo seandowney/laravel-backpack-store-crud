@@ -1,4 +1,11 @@
 <?php
+// order statuses must match the numbers in the array below
+if (!defined('ORDER_PENDING')) {
+    define('ORDER_PENDING', 1);
+    define('ORDER_PROCESSING', 2);
+    define('ORDER_DISPATCHED', 3);
+    define('ORDER_REFUNDED', 4);
+}
 
 return [
 
@@ -13,6 +20,13 @@ return [
 
     // You can make sure all your URLs use this prefix by using the backpack_url() helper instead of url()
     'route_prefix' => 'store',
+
+    'order_statuses' => [
+        1 => 'Pending',
+        2 => 'Processing',
+        3 => 'Dispatched',
+        4 => 'Refunded',
+    ],
 
     'countries' => [
         "IE" => "Ireland",

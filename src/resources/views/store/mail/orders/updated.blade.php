@@ -3,7 +3,7 @@
 
 Thank you for your order at {{ config('app.name') }}.
 
-Your order status has been updated to: **{{ $order->status }}**.
+Your order status has been updated to: **{{ config('seandowney.storecrud.order_statuses')[$order->status] }}**.
 
 @include('seandowney::mail.orders.partials.order_number')
 
