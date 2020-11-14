@@ -127,6 +127,12 @@ class ProductCrudController extends CrudController
             'label' => 'Remaining',
             'type' => 'number',
         ]);
+        $this->crud->addField([    // Number
+            'name'  => 'order',
+            'label' => 'Order',
+            'type'  => 'number',
+            'hint'  => 'The order it appears in the Categories',
+        ]);
         $this->crud->addField([    // CHECKBOX
             'name' => 'featured',
             'label' => 'Featured item',

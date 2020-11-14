@@ -22,6 +22,9 @@ class CategoryCrudController extends CrudController
         $this->crud->setRoute(config('backpack.base.route_prefix', 'admin').'/'.config('seandowney.storecrud.route_prefix', 'store').'/category');
         $this->crud->setEntityNameStrings('Category', 'Categories');
 
+        $this->crud->allowAccess('reorder');
+        $this->crud->enableReorder('title', 1);
+
         /*
         |--------------------------------------------------------------------------
         | COLUMNS AND FIELDS
