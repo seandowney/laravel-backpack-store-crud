@@ -10,7 +10,7 @@ class StoreController extends Controller
 {
     public function index()
     {
-        $categories = Category::published()->get();
+        $categories = Category::published()->orderBy('lft')->get();
 
         if (!$categories) {
             abort(404, 'Please go back to our <a href="'.url('').'">homepage</a>.');
@@ -32,7 +32,7 @@ class StoreController extends Controller
 
         $this->data['title'] = $category->title;
         $this->data['category'] = $category->withFakes();
-        $this->data['products'] = $category->products()->published()->get();
+        $this->data['products'] = $category->products()->published()->orderBy('order')->get();
 
         return view('seandowney::frontend.category', $this->data);
     }

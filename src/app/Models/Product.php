@@ -22,7 +22,7 @@ class Product extends Model
     protected $primaryKey = 'id';
     public $timestamps = true;
     // protected $guarded = ['id'];
-    protected $fillable = ['price_group_id', 'slug', 'title', 'code', 'intro', 'description', 'images', 'status', 'price_from', 'featured', 'total_num', 'remaining_num'];
+    protected $fillable = ['price_group_id', 'slug', 'title', 'code', 'intro', 'description', 'images', 'status', 'price_from', 'featured', 'total_num', 'remaining_num', 'order'];
     // protected $hidden = [];
     // protected $dates = [];
     protected $casts = [
