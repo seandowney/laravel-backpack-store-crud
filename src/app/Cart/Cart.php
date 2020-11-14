@@ -192,6 +192,10 @@ class Cart
         // loop through the cart items to work out the higher delivery cost
         foreach ($orderSummary['items'] as $item) {
             $deliveryGroup = $item->option->deliveryGroup;
+            if (!$deliveryGroup) {
+                continue;
+            }
+
             $deliveryOptions = $deliveryGroup->deliveryOptions;
 
             $countryOption = $deliveryOptions->firstWhere('country_code', $country);
